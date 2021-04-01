@@ -42,6 +42,7 @@ const ImagePicker = require('react-native-image-picker').default;
 import SelectDateTimeDialog from '../SelectDateTimeDialog';
 import ShareExtension from '../../utils/ShareExtension.js';
 import CameraView from '../CameraView';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 const urlUtils = require('@joplin/lib/urlUtils');
 
 const emptyArray: any[] = [];
@@ -1126,7 +1127,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 			// 			placeholderTextColor={theme.colorFaded}
 			// 		/>
 			// 	);
-
 			bodyComponent = (
 				<TextInput
 					autoCapitalize="sentences"
@@ -1143,6 +1143,17 @@ class NoteScreenComponent extends BaseScreenComponent {
 					placeholderTextColor={theme.colorFaded}
 				/>
 			);
+			if (Platform.OS === 'ios') {
+				bodyComponent = (
+					<KeyboardAwareScrollView
+						resetScrollToCoords={{ x: 0, y: 0 }}
+						enableAutomaticScroll={true}
+						extraScrollHeight={80}
+					>
+						{bodyComponent}
+					</KeyboardAwareScrollView>
+				);
+			}
 		}
 
 		const renderActionButton = () => {
@@ -1194,7 +1205,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 				/>
 			</View>
 		);
-
 		const noteTagDialog = !this.state.noteTagDialogShown ? null : <NoteTagsDialog onCloseRequested={this.noteTagDialog_closeRequested} />;
 
 		return (
